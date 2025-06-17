@@ -60,3 +60,31 @@ export const CREATE_GROUP = gql`
     }
   }
 `;
+
+/** Generate Companies */
+export const GENERATE_COMPANIES = gql`
+  mutation GenerateCompanies {
+    generateCompanies {
+      message {
+        en
+        es
+      }
+      task_id
+    }
+  }
+`;
+
+/** Get Example Companies with Task ID */
+export const GET_EXAMPLE_COMPANIES = gql`
+  query ExampleCompanies($exampleCompaniesId: ID!) {
+    exampleCompanies(id: $exampleCompaniesId) {
+      result {
+        id
+        name
+      }
+      message {
+        es
+      }
+    }
+  }
+`;

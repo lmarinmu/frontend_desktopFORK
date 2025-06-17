@@ -1,28 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
-import DemoTable from "~/app/_components/admin/Table";
+import DemoTable, { type Group } from "~/app/_components/admin/Table";
 import { Button } from "~/app/_components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/app/_components/ui/card";
 import { api } from "~/trpc/react";
 import { Loader2 } from "lucide-react";
-import { SearchTask } from "~/app/_components/admin/SearchTask";
+import { SearchTask } from "./SearchTask";
 import { Alert, AlertDescription } from "~/app/_components/ui/alert";
 
-const TableDemo = () => {
+export function GroupsPage() {
   const [taskId, setTaskId] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [searchTaskId, setSearchTaskId] = useState<string | null>(null);
 
-  // Query para buscar compañías por taskId
-  const { data: searchResult, isLoading: isSearching } = api.companies.getExampleCompanies.useQuery(
-    { taskId: searchTaskId || "" },
-    { 
-      enabled: searchTaskId !== null && searchTaskId !== "",
-      refetchOnWindowFocus: false
-    }
-  );
-
+  // Mutation para generar compañías
   const mutation = api.companies.generateCompanies.useMutation({
     onSuccess: (data) => {
       if (data) {
@@ -34,6 +26,15 @@ const TableDemo = () => {
       setStatus("Error: " + error.message);
     },
   });
+
+  // Query para buscar compañías por taskId
+  const { data: searchResult, isLoading: isSearching } = api.companies.getExampleCompanies.useQuery(
+    { taskId: searchTaskId ?? "" },
+    { 
+      enabled: !!searchTaskId,
+      refetchOnWindowFocus: false
+    }
+  );
 
   const handleGenerateCompanies = async () => {
     try {
@@ -47,7 +48,7 @@ const TableDemo = () => {
     <div className="space-y-4 p-4">
       <Card>
         <CardHeader>
-          <CardTitle>Generar Grupos</CardTitle>
+          <CardTitle>Generar Compañías</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <Button 
@@ -60,7 +61,7 @@ const TableDemo = () => {
                 Generando...
               </>
             ) : (
-              "Generar Grupos"
+              "Generar Compañías"
             )}
           </Button>
           {(taskId || status) && (
@@ -81,10 +82,10 @@ const TableDemo = () => {
             onSearch={setSearchTaskId} 
             isLoading={isSearching}
           />
-          {searchTaskId && (
+          {searchResult?.message && (
             <Alert>
               <AlertDescription>
-                Buscando Task ID: {searchTaskId}
+                {searchResult.message}
               </AlertDescription>
             </Alert>
           )}
@@ -94,6 +95,4 @@ const TableDemo = () => {
       <DemoTable data={searchResult?.groups || []} />
     </div>
   );
-};
-
-export default TableDemo;
+}

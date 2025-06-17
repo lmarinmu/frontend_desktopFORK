@@ -57,22 +57,12 @@ export const columns: ColumnDef<Group>[] = [
   },
 ];
 
-// 2. Datos de prueba (15 elementos)
-const data: Group[] = Array.from({ length: 15 }).map((_, i) => {
-  const now = new Date();
-  return {
-    id: `GRP${i + 1}`,
-    name: `Group ${i + 1}`,
-    description: `Description for Group ${i + 1}`,
-    isVerified: i % 2 === 0,
-    isOpen: i % 3 !== 0,
-    createdAt: new Date(now.getTime() - i * 86400000),
-    updatedAt: new Date(now.getTime() - i * 43200000),
-  };
-});
-
 // 3. Componente principal
-const DemoTable = () => {
+interface DemoTableProps {
+  data?: Group[];
+}
+
+const DemoTable = ({ data = [] }: DemoTableProps) => {
   return (
     <div className="p-4">
       <DataTable columns={columns} data={data} />

@@ -23,15 +23,24 @@ export const callGraphqlAPI = async<T> (
     mutation =  false, 
     variables:  Record<string, unknown> = {}
 ): Promise<GraphQLResponse<T>> => {
-    
-    console.log("Starting GraphQL request");
-
     let result = undefined;
     
     try {
 
-        if (!mutation)  { result = await serverClient.query( {query: req, fetchPolicy: "no-cache"})                         }
-        else            { result = await serverClient.mutate({mutation: req, variables: variables, fetchPolicy: "no-cache"})}
+        if (!mutation)  { 
+            result = await serverClient.query({
+                query: req,
+                variables: variables,
+                fetchPolicy: "no-cache"
+            });
+        }
+        else { 
+            result = await serverClient.mutate({
+                mutation: req,
+                variables: variables,
+                fetchPolicy: "no-cache"
+            });
+        }
         
         return { data: result.data as T };
         

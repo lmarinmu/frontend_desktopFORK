@@ -11,7 +11,8 @@ services:
 
     environment:
       DISPLAY: ${DISPLAY}
-      GRAPHQL_API: http://${mu_ag_HOSTNAME:-mu_ag}:${mu_ag_INTERNAL_PORT:-4000}/query
+      #host.docker.internal no es lo que deberia estar ahi, cambiar en el futuro
+      GRAPHQL_API: http://${mu_ag_HOSTNAME:-host.docker.internal}:${mu_ag_INTERNAL_PORT:-4000}/query
       ELECTRON_DISABLE_SANDBOX: "1"
 
 

@@ -1,4 +1,3 @@
-// components/ui/data-table.tsx
 "use client";
 
 import {
@@ -7,8 +6,6 @@ import {
   getPaginationRowModel,
   useReactTable,
   type ColumnDef,
-  getFilteredRowModel,
-  type Row,
 } from "@tanstack/react-table";
 
 import {
@@ -19,56 +16,27 @@ import {
   TableHeader,
   TableRow,
 } from "./table";
-import { Input } from "./input";
 import { Button } from "./button";
-import { useState } from "react";
-import { Search } from "lucide-react";
-import { format } from "date-fns";
+import { type ReactElement } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  const [globalFilter, setGlobalFilter] = useState("");
-
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>): ReactElement {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      globalFilter,
-    },
-    globalFilterFn: (row: Row<TData>, columnId: string, filterValue:string) => {
-      const values = Object.values(row.original as Record<string, unknown>).map((v, index) => {
-        if (typeof v === "boolean") {
-          if (index === 3) return v ? "yes" : "no"; // isVerified
-          if (index === 4) return v ? "open" : "closed"; // isOpen
-        }
-        if (v instanceof Date) return format(v, "yyyy-MM-dd");
-        if (typeof v === "string" || typeof v === "number") return String(v).toLowerCase();
-        return "";
-      });
-      return values.some((val) => val.includes(filterValue.toLowerCase()));
-    },
-    onGlobalFilterChange: setGlobalFilter,
   });
 
   return (
     <div className="space-y-4">
-      <div className="relative w-full md:w-1/3">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
-        <Input
-          placeholder="Search across all columns..."
-          value={globalFilter ?? ""}
-          onChange={(e) => setGlobalFilter(e.target.value)}
-          className="pl-9"
-        />
-      </div>
-
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -78,7 +46,10 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -90,7 +61,10 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -98,7 +72,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                  No hay resultados.
                 </TableCell>
               </TableRow>
             )}
@@ -113,7 +87,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Previous
+          Anterior
         </Button>
         <Button
           variant="outline"
@@ -121,7 +95,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          Next
+          Siguiente
         </Button>
       </div>
     </div>

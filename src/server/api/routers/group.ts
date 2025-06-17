@@ -80,6 +80,5 @@ export const groupRouter = createTRPCRouter({
                 updatedAt: new Date(grpCreated.updatedAt),
             }
 
-        })
-    
+        }),
 })
