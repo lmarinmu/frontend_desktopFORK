@@ -12,6 +12,7 @@ services:
     environment:
       DISPLAY: ${DISPLAY}
       GRAPHQL_API: http://${mu_ag_HOSTNAME:-mu_ag}:${mu_ag_INTERNAL_PORT:-4000}/query
+      ELECTRON_DISABLE_SANDBOX: "1"
 
 
     working_dir: /app
