@@ -1,6 +1,4 @@
-
-# Usa una imagen base de Node.js con soporte completo de dependencias
-FROM node:20-slim
+FROM node:22-slim
 
 # Instala librerías necesarias para Electron
 RUN apt-get update && apt-get install -y \

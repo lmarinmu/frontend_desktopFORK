@@ -5,9 +5,9 @@
   "type": "module",
   "main": "main.cjs",
   "scripts": {
-    "build": "next build",
-    "start": "next start",
-    "dev": "next dev",
+    "build": "npx next build",
+    "start": "npx next start",
+    "dev": "npx next dev",
     "electron": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron main.cjs\"",
     "electron:prod": "npm run build && electron main.cjs"
   },

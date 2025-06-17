@@ -1,21 +1,20 @@
-version: "3.8"
-
 services:
-  meetun_desktop:
+  mu_fe_de:
     build:
       context: .
-    container_name: meetun_desktop
+    container_name: mu_fe_de
 
-    # Monta el proyecto para desarrollo en caliente
+    # Solo se monta el socket de X11 para soporte gráfico
     volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
       - .:/app
-      - /tmp/.X11-unix:/tmp/.X11-unix  # Acceso al servidor gráfico
 
     environment:
-      - DISPLAY=${DISPLAY}
-      - GRAPHQL_API=${GRAPHQL_API:-http://localhost:4000/query}  # o ajusta si es necesario
+      DISPLAY: ${DISPLAY}
+      GRAPHQL_API: http://${mu_ag_HOSTNAME:-mu_ag}:${mu_ag_INTERNAL_PORT:-4000}/query
+
 
     working_dir: /app
 
-    # Evita problemas de permisos si usas bind mounts
     user: "${UID:-1000}:${GID:-1000}"
+
