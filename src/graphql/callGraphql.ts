@@ -44,8 +44,11 @@ export const callGraphqlAPI = async<T> (
                 errors = `Network Error: ${error.networkError.message}, ${error.networkError.cause as string}`                                
             }
             else if (error.graphQLErrors) {
-                errors = "GraphQL request done, but request had errors: ";
-                error.graphQLErrors.forEach (err => errors.concat(`; ${err.message}`));                
+                const messages = error.graphQLErrors.map((err, i) => {
+                    return `Error #${i + 1}:\n${JSON.stringify(err, null, 2)}`;
+                }).join("\n\n");
+
+                errors = `GraphQL request done, but the request had errors:\n${messages}`;                
             }
         }
         else if (error instanceof Error)    {errors = error.message}

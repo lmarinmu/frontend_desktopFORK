@@ -3,7 +3,7 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
 const httpLink = new HttpLink({
-  //TODO: XD, tengo que ajustar bien esta variable de entorno
+  //TODO: This environment variable should be better adjusted
   uri: process.env.GRAPHQL_API ?? "http://localhost:4000/query",
   fetch,
 });
