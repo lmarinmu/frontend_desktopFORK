@@ -1,4 +1,6 @@
 const { app, BrowserWindow } = require("electron");
+app.commandLine.appendSwitch('--no-sandbox');
+app.commandLine.appendSwitch('--disable-dev-shm-usage');
 const path = require("path");
 const { spawn } = require("child_process");
 
